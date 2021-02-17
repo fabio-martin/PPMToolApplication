@@ -33,8 +33,8 @@ class UpdateProject extends Component {
             this.setState({errors:nextProps.errors})
         }
 
-        const { projectName, projectIdentifier, description, start_date, end_date} = nextProps.project
-        this.setState({projectName, projectIdentifier, description, start_date,end_date})
+        const { id,projectName, projectIdentifier, description, start_date, end_date} = nextProps.project
+        this.setState({id,projectName, projectIdentifier, description, start_date,end_date})
     }
 
     onChange(e){
