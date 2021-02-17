@@ -47,5 +47,6 @@
     "@typescript-eslint/parser": "^4.15.1",
     "eslint": "^7.20.0",
     "eslint-plugin-react": "^7.22.0"
-  }
+  },
+  "proxy": "http://localhost:8080"
 }
