@@ -10,6 +10,7 @@ import com.example.ppmtool.repositories.ProjectRepository;
 import com.example.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -77,12 +78,42 @@ public class ProjectTaskService {
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 
-    public ProjectTask findPTByProjectSequence(String backlog, String pt_id){
+    public ProjectTask findPTByProjectSequence(String backlog_id, String pt_id){
 
         // make sure we are searching on the right backlog
+        Backlog backlog = backlogRepository.findByProjectIdentifier(backlog_id);
 
-        //
+        if(backlog == null){
+            throw new ProjectNotFoundException("Project with id: " + backlog_id + " does not have exist.");
+        }
 
-        return projectTaskRepository.findByProjectSequence(pt_id);
+        // make sure that our task exists
+        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(pt_id);
+
+        if(projectTask == null){
+            throw new ProjectNotFoundException("Project task '" + pt_id + "' not found.");
+        }
+
+        //  make sure that the backlog/project id in the path respondes to the right project
+        if(!projectTask.getProjectIdentifier().equals(backlog_id)){
+            throw new ProjectNotFoundException("Project task '" + pt_id + "' does not exist in project: '" + backlog_id );
+        }
+
+        return projectTask;
     }
+
+    // Update project task
+    public ProjectTask updatedProjectSequence( ProjectTask updatedTask, String backlog_id, String pt_id){
+        findPTByProjectSequence(backlog_id, pt_id);
+        // save update
+        return projectTaskRepository.save(updatedTask);
+    }
+
+    public void deleteProjectTaskByProjectSequence(String backlog_id, String pt_id){
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id, pt_id);
+        projectTaskRepository.delete(projectTask);
+    }
+
+
 }
+
