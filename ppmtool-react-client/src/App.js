@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import './App.css';
-import Dashboard from './components/Dashboard';
-import Header from './components/Layout/Header';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import AddProject from "./components/Project/AddProject";
-import UpdateProject from "./components/Project/UpdateProject";
 import { Provider } from "react-redux"
 import store  from "./store"
+import Dashboard from './components/Dashboard';
+import Header from './components/Layout/Header';
+import UpdateProject from "./components/Project/UpdateProject";
+import AddProject from "./components/Project/AddProject.jsx";
+import ProjectBoard from "./components/ProjectBoard/ProjectBoard";
+import AddProjectTask from "./components/ProjectBoard/ProjectTasks/AddProjectTask";
 
 
 class App extends Component {
@@ -20,6 +22,8 @@ class App extends Component {
             <Route exact path="/dashboard" component={Dashboard} />
             <Route exact path="/addProject" component={AddProject} />
             <Route exact path="/updateProject/:id" component={UpdateProject} />
+            <Route exact path="/projectboard/:id" component={ProjectBoard} />
+            <Route exact path="/addProjectTask/:id" component={AddProjectTask} />
           </div>
         </Router>
       </Provider>
