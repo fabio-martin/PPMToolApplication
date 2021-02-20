@@ -6,10 +6,47 @@ class ProjectTask extends Component {
 
         const { projectTask } = this.props
 
+        let priorityString; 
+        let priorityClass;
+
+        switch(projectTask.priority){
+            case 1:
+                priorityClass = "bg-danger text-light"
+                priorityString = "HIGH"
+                break;
+            case 2:
+                priorityClass = "bg-warning text-light"
+                priorityString = "Medium"
+                break;
+            case 3:
+                priorityClass = "bg-info text-light"
+                priorityString = "INFO"
+                break;
+            default:
+                break;
+        }
+
+
+        // if(projectTask.priority === 1){
+        //     priorityClass = "bg-danger text-light"
+        //     priorityString = "HIGH"
+        // }
+
+        // if(projectTask.priority === 2){
+        //     priorityClass = "bg-warning text-light"
+        //     priorityString = "Medium"
+        // }
+
+        // if(projectTask.priority === 3){
+        //     priorityClass = "bg-info text-light"
+        //     priorityString = "INFO"
+        // }
+
+
         return (
             <div className="card mb-1 bg-light">
-                <div className="card-header text-primary">
-                    ID: {projectTask.projectSequence}   Priority: {projectTask.priority}
+                <div className={`card-header text-primary ${priorityClass}`}>
+                    ID: {projectTask.projectSequence}   Priority: {priorityString}
                 </div>
                 <div className="card-body bg-light">
                     <h5 className="card-title">{projectTask.summary}</h5>

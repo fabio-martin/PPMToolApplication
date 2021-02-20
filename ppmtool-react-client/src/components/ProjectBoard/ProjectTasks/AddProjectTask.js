@@ -17,7 +17,7 @@ class AddProjectTask extends Component {
             acceptanceCriteria: "",
             status: "",
             priority: 0,
-            dueDate: null,
+            dueDate: "",
             projectIdentifier: id,
             errors:{}
         }
@@ -109,7 +109,7 @@ class AddProjectTask extends Component {
                                     <select 
                                         className="form-control form-control-lg" 
                                         name="priority"
-                                        value={this.state.priority}
+                                        // value={this.state.priority}
                                         onChange={this.onChange}
                                     >
                                         <option value={0}>Select Priority</option>
@@ -123,7 +123,7 @@ class AddProjectTask extends Component {
                                     <select 
                                         className="form-control form-control-lg" 
                                         name="status"
-                                        value={this.state.status}
+                                        // value={this.state.status}
                                         onChange={this.onChange}
                                     >
                                         <option value="">Select Status</option>
