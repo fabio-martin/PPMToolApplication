@@ -8,13 +8,18 @@ import { getBackLog } from "./../../actions/backlogActions"
 
 class ProjectBoard extends Component {
 
-    // constructor(){
-    //     super()
+    constructor(){
+        super()
+        this.state = {
+            errors:{}
+        }
+    }
 
-    //     this.state = {
-    //         errors:{}
-    //     }
-    // }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.errors){
+            this.setState({errors:nextProps.errors})
+        }
+    }
 
     componentDidMount(){
         const { id } = this.props.match.params
@@ -24,8 +29,29 @@ class ProjectBoard extends Component {
     render() {
 
         const { id } = this.props.match.params
-
         const { projectTasks } = this.props.backlog
+        const { errors } = this.state
+
+        const boardAlgorithm = ( errors, projectTasks ) => {
+            if(projectTasks.length < 1){
+                if(errors.projectNotFound){
+                    return (
+                    <div className="alert alert-danger text-center" role="alert">
+                       {errors.projectNotFound}
+                    </div>)
+                } else {
+                    return (
+                     <div className="alert alert-info text-center" role="alert">
+                        No Project Tasks on this board
+                     </div>
+                    )
+                }
+            } else {
+                return  <Backlog projectTasks={projectTasks}/>
+            }        
+        }
+
+        let BoardContent = boardAlgorithm(errors, projectTasks)
 
         return (
         <div className="container">
@@ -34,7 +60,7 @@ class ProjectBoard extends Component {
             </Link>
             <br />
             <hr />
-            <Backlog projectTasks={projectTasks}/>
+            {BoardContent}
         </div>
         )
     }
@@ -42,11 +68,14 @@ class ProjectBoard extends Component {
 
 ProjectBoard.propTypes = { 
     getBackLog:PropTypes.func.isRequired,
-    backlog:PropTypes.object.isRequired
+    backlog:PropTypes.object.isRequired,
+    errors:PropTypes.object.isRequired
+    
 }
 
 const mapStateToProps = state => ({ 
-    backlog : state.backlogReducer
+    backlog : state.backlog,
+    errors: state.errors
 })
 
 export default connect(mapStateToProps, { getBackLog })(ProjectBoard);

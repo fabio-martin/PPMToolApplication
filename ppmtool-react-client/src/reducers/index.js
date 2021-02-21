@@ -6,6 +6,6 @@ import projectReducer from "./projectReducer"
 export default combineReducers({
     errors: errorReducer,
     project: projectReducer,
-    backlogReducer: backlogReducer
+    backlog: backlogReducer
 })
 
