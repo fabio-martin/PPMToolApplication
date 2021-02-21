@@ -1,12 +1,18 @@
 package com.example.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +37,42 @@ public class User {
 
     // TODO OneToMany with Project
 
+    public User() { }
+
+    /*
+     UserDetails interface Methods
+    */
+
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true;
+    }
+
     @PrePersist
     protected void onCreate(){
         this.created_at = new Date();
@@ -41,7 +83,6 @@ public class User {
         this.updated_at = new Date();
     }
 
-    public User() { }
 
     public Long getId() {
         return id;
@@ -54,6 +95,7 @@ public class User {
     public String getUsername() {
         return username;
     }
+
 
     public void setUsername(String username) {
         this.username = username;
@@ -74,6 +116,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
 
     public String getConfirmPassword() {
         return confirmPassword;

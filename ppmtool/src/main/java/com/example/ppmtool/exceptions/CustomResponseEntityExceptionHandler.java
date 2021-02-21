@@ -1,5 +1,6 @@
 package com.example.ppmtool.exceptions;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,6 +22,12 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler
     public final ResponseEntity<?> handleProjectNotFoundException(ProjectNotFoundException ex, WebRequest request){
         ProjectNotFoundExceptionResponse exceptionResponse= new ProjectNotFoundExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<?> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex, WebRequest request){
+        UsernameAlreadyExistsResponse exceptionResponse= new UsernameAlreadyExistsResponse(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
