@@ -1,5 +1,6 @@
 package com.example.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class ProjectTask {
     private String acceptanceCriteria;
     private String status;
     private Integer priority;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dueDate;
     // ManyToOne with backlog
     @Column(updatable = false)
@@ -29,8 +31,10 @@ public class ProjectTask {
     @JoinColumn(name="backlog_id", updatable = false, nullable = false)
     @JsonIgnore
     private Backlog backlog;
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(updatable = false)
     private Date created_at;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updated_at;
 
     @PrePersist

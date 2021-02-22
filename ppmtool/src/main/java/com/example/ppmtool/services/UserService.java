@@ -27,7 +27,7 @@ public class UserService {
 
             // TODO make sure that password and confirm password match
 
-            // TODO We don't persist or show confirm password
+            //  We don't persist or show confirm password
             newUser.setConfirmPassword("");
             return userRepository.save(newUser);
 
