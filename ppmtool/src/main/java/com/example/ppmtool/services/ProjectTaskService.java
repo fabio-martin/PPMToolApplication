@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -26,51 +27,50 @@ public class ProjectTaskService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private ProjectService projectService;
 
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask){
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask, String username){
 
-        try {
+        // Project Tasks to be added to a specific project, project != null, Backlog exists
+        Backlog backlog = projectService.findProjectByIdentifier(projectIdentifier, username).getBacklog();
 
-            // Project Tasks to be added to a specific project, project != null, Backlog exists
-            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+        // set the Backlog to Project Task
+        projectTask.setBacklog(backlog);
 
-            // set the Backlog to Project Task
-            projectTask.setBacklog(backlog);
+        // We want our project sequence to be like this: IDPRO-1 IDPRO-2 ....100 101
+        int backlogSequence = backlog.getPTSequence();
 
-            // We want our project sequence to be like this: IDPRO-1 IDPRO-2 ....100 101
-            int backlogSequence = backlog.getPTSequence();
+        // Update the backlog sequence
+        backlogSequence++;
+        backlog.setPTSequence(backlogSequence);
+        backlogRepository.save(backlog);
 
-            // Update the backlog sequence
-            backlogSequence++;
-            backlog.setPTSequence(backlogSequence);
-            backlogRepository.save(backlog);
+        // Add sequence to projectTask
+        projectTask.setProjectSequence(projectIdentifier + "-" + backlogSequence);
+        projectTask.setProjectIdentifier(projectIdentifier);
 
-            // Add sequence to projectTask
-            projectTask.setProjectSequence(projectIdentifier + "-" + backlogSequence);
-            projectTask.setProjectIdentifier(projectIdentifier);
-
-            // Initial priority when priority is null
-            Integer projectTaskPriority = projectTask.getPriority();
-            if( projectTaskPriority == null || projectTaskPriority == 0 ){
-                projectTask.setPriority(3);
-            }
-
-            // Initial status when status is null
-            if(projectTask.getStatus() == "" || projectTask.getStatus() == null ){
-                projectTask.setStatus("TO_DO");
-            }
-
-            return projectTaskRepository.save(projectTask);
-
-        } catch(Exception ex) {
-            throw new ProjectNotFoundException("Project Not Found");
+        // Initial priority when priority is null
+        Integer projectTaskPriority = projectTask.getPriority();
+        if( projectTaskPriority == null || projectTaskPriority == 0 ){
+            projectTask.setPriority(3);
         }
+
+        // Initial status when status is null
+        if(projectTask.getStatus() == "" || projectTask.getStatus() == null ){
+            projectTask.setStatus("TO_DO");
+        }
+
+        return projectTaskRepository.save(projectTask);
+
 
     }
 
-    public List<ProjectTask> findBackLogById(String id) {
+    public List<ProjectTask> findBackLogById(String id, String username) {
 
-        Project project = projectRepository.findByProjectIdentifier(id);
+        Project project = projectService.findProjectByIdentifier(id, username);
+
+//        Project project = projectRepository.findByProjectIdentifier(id);
 
         if(project == null)
             throw new ProjectNotFoundException("Project with id: " + id + " does not have backlog.");
