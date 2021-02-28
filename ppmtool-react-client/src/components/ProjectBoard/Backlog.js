@@ -6,6 +6,8 @@ class Backlog extends Component {
 
         const { projectTasks } = this.props
 
+        console.log(projectTasks)
+
         const tasks = projectTasks.map(projectTask => (
             <ProjectTask key={projectTask.id} projectTask={projectTask}/>
         ))
