@@ -67,11 +67,11 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
 
-        // Validate that passwords match
-        userValidator.validate(user, result);
-
         ResponseEntity<?> errorMap = checkForErrors(result);
         if (errorMap != null) return errorMap;
+
+        // Validate that passwords match
+        userValidator.validate(user, result);
 
         User newUser = userService.saveUser(user);
 
