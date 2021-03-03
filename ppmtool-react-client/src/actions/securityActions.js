@@ -5,9 +5,6 @@ import jwt_decode from "jwt-decode"
 
 export const createNewUser  = (newUser, history) => async dispatch => {
     try {
-
-        console.log(newUser)
-
         await axios.post("/api/users/register", newUser)
         history.push("/login")
         dispatch({
@@ -16,10 +13,6 @@ export const createNewUser  = (newUser, history) => async dispatch => {
         })
         
     } catch (err) {
-
-        console.log("ERRORS")
-        console.log(err.response.data)
-
         dispatch({
             type: GET_ERRORS,
             payload: err.response.data
@@ -45,9 +38,6 @@ export const login  = LoginRequest => async dispatch => {
         // decode the token on react 
         const decoded = jwt_decode(token)
 
-        console.log("Decoded user from token")
-        console.log(decoded)
-        
         // dispatch to our security reducer 
         dispatch({
             type: SET_CURRENT_USER,
@@ -61,3 +51,13 @@ export const login  = LoginRequest => async dispatch => {
         })
     }
 } 
+
+
+export const logout = () => dispatch => { 
+    localStorage.removeItem("jwtToken")
+    setJWTToken(false)
+    dispatch = {
+        type:SET_CURRENT_USER,
+        payload: {}
+    }
+}
